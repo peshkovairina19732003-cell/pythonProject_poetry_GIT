@@ -16,7 +16,7 @@ def mask_account_card(input_str: str) -> str:
         raise ValueError("В строке не найден номер")
 
     # Текст до номера (название) и сам номер.
-    prefix = input_str[:match.start()].strip()
+    prefix = input_str[: match.start()].strip()
     number = match.group()
 
     # Определяем тип по префиксу.
