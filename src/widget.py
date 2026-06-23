@@ -1,4 +1,4 @@
-from .some_other_module import get_mask_card_number, get_mask_account
+from src.masks.py_module import get_mask_card_number, get_mask_account
 
 import re
 
