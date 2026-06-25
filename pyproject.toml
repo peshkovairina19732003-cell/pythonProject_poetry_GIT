@@ -1,14 +1,12 @@
 [project]
-name = "pythonproject-poetry"
+name = "pythonproject-poetry-git"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Irina Peshkova",email = "ваш.peshkova.irina19732003@gmail.com"}
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 dependencies = [
-    "black (>=26.5.1,<27.0.0)",
-    "flake8 (>=7.3.0,<8.0.0)"
 ]
 
 
@@ -17,18 +15,11 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [dependency-groups]
-lint = [
+dev = [
     "black (>=26.5.1,<27.0.0)",
     "isort (>=8.0.1,<9.0.0)",
     "flake8 (>=7.3.0,<8.0.0)",
     "mypy (>=2.1.0,<3.0.0)"
-
-]
-dev = [
-    "black (>=26.5.1,<27.0.0)",
-    "isort (>=8.0.1,<9.0.0)",
-    "mypy (>=2.1.0,<3.0.0)",
-    "flake8 (>=7.3.0,<8.0.0)"
 ]
 [tool.mypy]
 disallow_untyped_defs = true
