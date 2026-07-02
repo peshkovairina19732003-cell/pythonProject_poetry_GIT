@@ -37,4 +37,3 @@ def sort_by_date(operations: List[Dict[str, Any]], reverse: bool = True) -> List
 
     """
     return sorted(operations, key=lambda op: datetime.fromisoformat(op['date']), reverse=reverse)
-

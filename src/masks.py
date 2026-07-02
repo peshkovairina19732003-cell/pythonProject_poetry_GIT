@@ -4,7 +4,7 @@ def get_mask_card_number(card_number: str) -> str:
     в замаскированном формате XXXX XX** **** XXXX.
     Проверяет, что номер карты состоит из 16 цифр.
     """
-    # 1. ПРОВЕРКА ТИПА - САМОЕ ПЕРВОЕ ДЕЙСТВИЕ!
+    # 1. ПРОВЕРКА ТИПА
     if not isinstance(card_number, str):
         raise ValueError("Номер карты должен быть строкой")
 
