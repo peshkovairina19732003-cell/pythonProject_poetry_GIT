@@ -6,6 +6,7 @@ from src.widget import get_date, mask_account_card
 # Тесты для функции mask_account_card
 # ========================
 
+
 def test_mask_account_card_account():
     """Тест: Корректная маскировка номера счета."""
     input_str = "Счет 9876543210"
@@ -40,6 +41,7 @@ def test_mask_account_card_parametrized(card_type, card_number, expected):
 # НОВЫЙ ТЕСТ: Для достижения 100% покрытия
 # ========================
 
+
 def test_mask_account_card_no_number_found():
     """
     Тест: Функция вызывает ValueError, если в строке отсутствует числовой номер.
@@ -54,17 +56,20 @@ def test_mask_account_card_no_number_found():
 # Тесты для функции get_date
 # ========================
 
+
 def test_get_date_with_microseconds():
     """Тест: Обработка даты С микросекундами."""
     iso_str = "2024-03-11T02:26:18.671407"
     expected = "11.03.2024"
     assert get_date(iso_str) == expected
 
+
 def test_get_date_without_microseconds():
     """Тест: Обработка даты БЕЗ микросекунд."""
     iso_str = "2024-03-11T02:26:18"
     expected = "11.03.2024"
     assert get_date(iso_str) == expected
+
 
 def test_get_date_invalid_format():
     """Тест: Функция вызывает ValueError для некорректного формата даты."""
