@@ -18,9 +18,9 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "black (>=26.5.1,<27.0.0)",
     "isort (>=8.0.1,<9.0.0)",
-    "flake8 (>=7.3.0,<8.0.0)",
     "mypy (>=2.1.0,<3.0.0)",
-    "pytest-cov (>=7.1.0,<8.0.0)"
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)"
 ]
 [tool.mypy]
 disallow_untyped_defs = true
@@ -32,8 +32,8 @@ exclude = 'venv'
 multi_line_output = 3
 include_trailing_comma = true
 known_third_party = ["django", "flask"]
-line_length = 119
+line_length = 123
 
 [tool.black]
-line-length = 119
+line-length = 123
 skip-string-normalization = true

@@ -120,6 +120,43 @@ get_mask_account:
 Обработка номеров счетов разной длины (главное условие — не менее 4 цифр).
 Генерация ошибки ValueError для номеров короче 4 цифр или с нецифровыми символами.
 
+## Модуль генераторов (src/generators.py)
+Для работы с большими объемами данных реализован модуль generators. Он содержит функции, возвращающие итераторы 
+(генераторы), что позволяет эффективно обрабатывать данные без загрузки их целиком в оперативную память.
+
+### Функции:
+filter_by_currency(transactions, currency_code)
+Фильтрует транзакции по коду валюты.
+
+~~~
+from src.generators import filter_by_currency
+~~~
+~~~
+usd_transactions = filter_by_currency(all_transactions, "USD")
+first_two_usd = [next(usd_transactions) for _ in range(2)]
+transaction_descriptions(transactions)
+~~~
+Последовательно извлекает описания операций.
+
+~~~
+from src.generators import transaction_descriptions
+
+descriptions = transaction_descriptions(all_transactions)
+print(next(descriptions)) # Выведет описание первой транзакции
+card_number_generator(start, end)
+~~~
+Генерирует валидные номера карт в указанном числовом диапазоне.
+
+~~~
+from src.generators import card_number_generator
+
+for number in card_number_generator(1, 5):
+    print(number)
+# >> 0000 0000 0000 0001
+# >> 0000 0000 0000 0002
+# ...
+~~~
+
 ## Вклад в проект
 ### Мы приветствуем ваш вклад! 
 Пожалуйста, следуйте процессу GitFlow:
