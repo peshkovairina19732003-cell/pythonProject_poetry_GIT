@@ -7,7 +7,7 @@ from src.widget import get_date, mask_account_card
 # ========================
 
 
-def test_mask_account_card_account():
+def test_mask_account_card_account() -> None:
     """Тест: Корректная маскировка номера счета."""
     input_str = "Счет 9876543210"
     expected = "Счет **3210"

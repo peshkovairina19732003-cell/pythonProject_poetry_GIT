@@ -1,16 +1,19 @@
+# tests/test_processing.py
+
 from datetime import datetime
+from typing import List, Dict, Any  # <-- Добавлен импорт для типов
 
 import pytest
 
 from src.processing import filter_by_state, sort_by_date
 
-# ========================
-# Фикстуры (Fixtures)
-# ========================
 
+# ========================
+# Фикстуры (Fixtures) + Типы
+# ========================
 
 @pytest.fixture
-def sample_operations():
+def sample_operations() -> List[Dict[str, Any]]:  # <-- Указали, что возвращается Список Словарей
     """
     Фикстура, предоставляющая базовый набор операций для тестирования.
     Содержит разные статусы и даты.
@@ -24,7 +27,7 @@ def sample_operations():
 
 
 @pytest.fixture
-def operations_with_same_date():
+def operations_with_same_date() -> List[Dict[str, Any]]:  # <-- То же самое здесь
     """
     Фикстура для тестирования сортировки, где у нескольких операций одинаковая дата.
     """
@@ -36,7 +39,7 @@ def operations_with_same_date():
 
 
 @pytest.fixture
-def empty_operations():
+def empty_operations() -> List[Dict[str, Any]]:  # <-- И здесь
     """
     Фикстура с пустым списком для проверки краевых случаев.
     """
@@ -47,28 +50,27 @@ def empty_operations():
 # Тесты для функции filter_by_state
 # ========================
 
-
-def test_filter_by_state_default(sample_operations):
+def test_filter_by_state_default(sample_operations: List[Dict[str, Any]]) -> None:  # <-- Тип входного параметра + возврат None
     """Тест: Фильтрация по статусу по умолчанию ('EXECUTED')."""
     result = filter_by_state(sample_operations)
     assert len(result) == 2
     assert all(op["state"] == "EXECUTED" for op in result)
 
 
-def test_filter_by_state_specific(sample_operations):
+def test_filter_by_state_specific(sample_operations: List[Dict[str, Any]]) -> None:  # <-- Тип входного параметра
     """Тест: Фильтрация по конкретному статусу ('CANCELED')."""
     result = filter_by_state(sample_operations, state="CANCELED")
     assert len(result) == 1
     assert result[0]["id"] == 2
 
 
-def test_filter_by_state_no_matches(sample_operations):
+def test_filter_by_state_no_matches(sample_operations: List[Dict[str, Any]]) -> None:  # <-- Тип входного параметра
     """Тест: Функция возвращает пустой список, если статус не найден."""
     result = filter_by_state(sample_operations, state="REFUNDED")
     assert result == []
 
 
-def test_filter_by_state_empty_list(empty_operations):
+def test_filter_by_state_empty_list(empty_operations: List[Dict[str, Any]]) -> None:  # <-- Тип входного параметра
     """Тест: Функция корректно работает с пустым входным списком."""
     result = filter_by_state(empty_operations)
     assert result == []
@@ -78,26 +80,21 @@ def test_filter_by_state_empty_list(empty_operations):
 # Тесты для функции sort_by_date
 # ========================
 
-
-def test_sort_by_date_descending(sample_operations):
+def test_sort_by_date_descending(sample_operations: List[Dict[str, Any]]) -> None:  # <-- Тип входного параметра
     """Тест: Сортировка по убыванию дат (новые -> старые)."""
-    result = sort_by_date(sample_operations)  # reverse=True по умолчанию
+    result = sort_by_date(sample_operations)
     dates = [datetime.fromisoformat(op["date"]) for op in result]
-    # Проверяем, что каждая следующая дата не больше предыдущей
     assert all(dates[i] >= dates[i + 1] for i in range(len(dates) - 1))
 
 
-def test_sort_by_date_ascending(sample_operations):
+def test_sort_by_date_ascending(sample_operations: List[Dict[str, Any]]) -> None:  # <-- Тип входного параметра
     """Тест: Сортировка по возрастанию дат (старые -> новые)."""
     result = sort_by_date(sample_operations, reverse=False)
     dates = [datetime.fromisoformat(op["date"]) for op in result]
-    # Проверяем, что каждая следующая дата не меньше предыдущей
     assert all(dates[i] <= dates[i + 1] for i in range(len(dates) - 1))
 
 
-def test_sort_by_date_same_date(operations_with_same_date):
-    """Тест: Стабильность сортировки при одинаковых датах.
-    Порядок элементов с одинаковым ключом сортировки не должен меняться."""
+def test_sort_by_date_same_date(operations_with_same_date: List[Dict[str, Any]]) -> None:  # <-- Тип входного параметра
+    """Тест: Стабильность сортировки при одинаковых датах."""
     result = sort_by_date(operations_with_same_date)
-    # Так как даты одинаковы, порядок должен быть таким же, как во входных данных
     assert [op["id"] for op in result] == [1, 2, 3]

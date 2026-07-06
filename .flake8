@@ -1,7 +1,9 @@
-[tool.flake8]
-max-line-length = 119
-exclude = .git,__pycache__,old,build,dist
-ignore = E203, W503
-max-complexity = 10
-show-source = true
-exclude = .git,__pycache__,.venv,venv,build,dist
+max-line-length = 123
+extend-ignore = E203
+exclude =
+    .git,
+    __pycache__,
+    venv/,
+    build/,
+    dist/
+
