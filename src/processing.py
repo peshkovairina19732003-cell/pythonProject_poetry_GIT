@@ -3,18 +3,13 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 
-def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
+def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> Iterator[Dict[str, Any]]:
     """
-    Фильтрует операции по заданному статусу.
-
-    Args:
-        operations: Список словарей с операциями.
-        state: Статус для фильтрации. По умолчанию 'EXECUTED'.
-
-    Returns:
-        Новый список отфильтрованных операций.
+    Фильтрует операции по статусу.
     """
-    return [op for op in operations if op.get("state") == state]
+    for operation in operations:
+        if operation.get("state") == state:
+            yield operation
 
 
 def sort_by_date(operations: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
