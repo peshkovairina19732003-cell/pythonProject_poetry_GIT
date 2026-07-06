@@ -1,39 +1,35 @@
+# src/processing.py
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import List, Dict, Any
 
 
-def filter_by_state(operations: List[Dict[str, Any]], state: str = 'EXECUTED') -> List[Dict[str, Any]]:
+def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
     """
-    Принимает список словарей с данными об операциях и фильтрует их по статусу.
-
-    Функция возвращает новый список, содержащий только те словари,
-    у которых значение ключа 'state' совпадает с переданным параметром.
+    Фильтрует операции по заданному статусу.
 
     Args:
-        operations (List[Dict[str, Any]]): Список словарей, представляющих банковские операции.
-        state (str, optional): Статус для фильтрации. По умолчанию 'EXECUTED'.
+        operations: Список словарей с операциями.
+        state: Статус для фильтрации. По умолчанию 'EXECUTED'.
 
     Returns:
-        List[Dict[str, Any]]: Новый список отфильтрованных операций.
-
+        Новый список отфильтрованных операций.
     """
-    return [operation for operation in operations if operation.get('state') == state]
+    return [op for op in operations if op.get("state") == state]
 
 
 def sort_by_date(operations: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
     """
-    Сортирует список словарей по значению ключа 'date'.
-
-    Функция принимает список операций и возвращает новый список,
-    отсортированный по дате. Формат даты в словаре — ISO 8601.
+    Сортирует операции по дате.
 
     Args:
-        operations (List[Dict[str, Any]]): Список словарей, представляющих операции.
-        reverse (bool, optional): Порядок сортировки. True для убывания (сначала новые).
-                                  False для возрастания (сначала старые). По умолчанию True.
+        operations: Список словарей с операциями.
+        reverse: Порядок сортировки. True (по умолч.) - убывание (новые сверху).
 
     Returns:
-        List[Dict[str, Any]]: Новый отсортированный список операций.
-
+        Новый отсортированный список.
     """
-    return sorted(operations, key=lambda op: datetime.fromisoformat(op['date']), reverse=reverse)
+
+    def get_sort_key(op):
+        return datetime.fromisoformat(op["date"])
+
+    return sorted(operations, key=get_sort_key, reverse=reverse)
