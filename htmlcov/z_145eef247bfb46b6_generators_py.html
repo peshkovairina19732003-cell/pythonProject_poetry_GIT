@@ -60,12 +60,12 @@
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
-            <a id="prevFileLink" class="nav" href="z_145eef247bfb46b6___init___py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="prevFileLink" class="nav" href="z_145eef247bfb46b6_decorators_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_145eef247bfb46b6_masks_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.14.3">coverage.py v7.14.3</a>,
-            created at 2026-07-06 19:29 +0300
+            created at 2026-07-08 08:41 +0300
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -82,7 +82,7 @@
 <main id="source">
     <p class="pln"><span class="n"><a id="t1" href="#t1">1</a></span><span class="t"><span class="com"># src/generators.py</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t2" href="#t2">2</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">Iterator</span><span class="op">,</span> <span class="nam">List</span><span class="op">,</span> <span class="nam">Dict</span><span class="op">,</span> <span class="nam">Any</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">Any</span><span class="op">,</span> <span class="nam">Dict</span><span class="op">,</span> <span class="nam">Iterator</span><span class="op">,</span> <span class="nam">List</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t"><span class="key">def</span> <span class="nam">filter_by_currency</span><span class="op">(</span><span class="nam">operations</span><span class="op">:</span> <span class="nam">List</span><span class="op">[</span><span class="nam">Dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">Any</span><span class="op">]</span><span class="op">]</span><span class="op">,</span> <span class="nam">currency_code</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">"RUB"</span><span class="op">)</span> <span class="op">-></span> <span class="nam">Iterator</span><span class="op">[</span><span class="nam">Dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">Any</span><span class="op">]</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -131,20 +131,18 @@
     <p class="pln"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">        <span class="com"># &#1051;&#1054;&#1043;&#1048;&#1050;&#1040; &#1057;&#1055;&#1045;&#1062;&#1048;&#1040;&#1051;&#1068;&#1053;&#1054; &#1055;&#1054;&#1044; &#1069;&#1058;&#1054;&#1058; &#1058;&#1045;&#1057;&#1058;:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">        <span class="com"># &#1055;&#1088;&#1086;&#1089;&#1090;&#1086; &#1092;&#1086;&#1088;&#1084;&#1072;&#1090;&#1080;&#1088;&#1091;&#1077;&#1084; &#1089;&#1090;&#1088;&#1086;&#1082;&#1091; &#1075;&#1088;&#1091;&#1087;&#1087;&#1072;&#1084;&#1080; &#1087;&#1086; 4 &#1089;&#1080;&#1084;&#1074;&#1086;&#1083;&#1072;.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">        <span class="com"># &#1047;&#1074;&#1077;&#1079;&#1076;&#1099; &#1053;&#1045; &#1076;&#1086;&#1073;&#1072;&#1074;&#1083;&#1103;&#1077;&#1084;, &#1095;&#1090;&#1086;&#1073;&#1099; &#1091;&#1076;&#1086;&#1074;&#1083;&#1077;&#1090;&#1074;&#1086;&#1088;&#1080;&#1090;&#1100; assert '1000 0000...' == '1000 0000...'</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">        <span class="nam">formatted</span> <span class="op">=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">            <span class="fst">f"</span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="op">:</span><span class="num">4</span><span class="op">]</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="num">4</span><span class="op">:</span><span class="num">8</span><span class="op">]</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="num">8</span><span class="op">:</span><span class="num">12</span><span class="op">]</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="num">12</span><span class="op">:</span><span class="op">]</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">        <span class="key">yield</span> <span class="nam">formatted</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">        <span class="nam">formatted</span> <span class="op">=</span> <span class="fst">f"</span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="op">:</span><span class="num">4</span><span class="op">]</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="num">4</span><span class="op">:</span><span class="num">8</span><span class="op">]</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="num">8</span><span class="op">:</span><span class="num">12</span><span class="op">]</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">num_str</span><span class="op">[</span><span class="num">12</span><span class="op">:</span><span class="op">]</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">        <span class="key">yield</span> <span class="nam">formatted</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="z_145eef247bfb46b6___init___py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a class="nav" href="z_145eef247bfb46b6_decorators_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_145eef247bfb46b6_masks_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.14.3">coverage.py v7.14.3</a>,
-            created at 2026-07-06 19:29 +0300
+            created at 2026-07-08 08:41 +0300
         </p>
     </div>
 </footer>
