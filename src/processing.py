@@ -1,6 +1,6 @@
 # src/processing.py
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> Iterator[Dict[str, Any]]:
