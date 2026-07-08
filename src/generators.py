@@ -1,6 +1,6 @@
 # src/generators.py
 
-from typing import Iterator, List, Dict, Any
+from typing import Any, Dict, Iterator, List
 
 
 def filter_by_currency(operations: List[Dict[str, Any]], currency_code: str = "RUB") -> Iterator[Dict[str, Any]]:
@@ -49,7 +49,5 @@ def card_number_generator(start: int, end: int) -> Iterator[str]:
         # ЛОГИКА СПЕЦИАЛЬНО ПОД ЭТОТ ТЕСТ:
         # Просто форматируем строку группами по 4 символа.
         # Звезды НЕ добавляем, чтобы удовлетворить assert '1000 0000...' == '1000 0000...'
-        formatted = (
-            f"{num_str[:4]} {num_str[4:8]} {num_str[8:12]} {num_str[12:]}"
-        )
+        formatted = f"{num_str[:4]} {num_str[4:8]} {num_str[8:12]} {num_str[12:]}"
         yield formatted
