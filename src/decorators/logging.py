@@ -1,69 +1,86 @@
+# src/decorators/logging.py
+
+import contextlib
 import functools
 import logging
-import sys
-from contextlib import redirect_stdout
-from datetime import datetime
-from io import StringIO
-from typing import Any, Callable, Dict, Iterator, List, Optional, TypeVar, cast
+import os
+import time
+from typing import Any, Callable, Optional, TypeVar
 
 F = TypeVar('F', bound=Callable[..., Any])
-R = TypeVar('R')
 
-
-def log(filename: Optional[str] = None) -> Callable[[F], F]:
+def log(filename: Optional[str] = None, level: int = logging.INFO) -> Callable[[F], F]:
     """
-    Декоратор для логирования вызовов функций.
+    Декоратор для автоматического логирования функций.
 
-    Если указан filename, пишет в файл. Иначе выводит в консоль.
-    Логирует время выполнения, аргументы и результат/ошибку.
+    Args:
+        filename (Optional[str]): Имя файла для логов. Если None — выводит в консоль.
+        level (int): Уровень логирования (по умолчанию INFO).
+
+    Returns:
+        Callable: Обернутая функция.
     """
+
+    class LogContext(contextlib.AbstractContextManager):
+        """Контекст для надежного управления логгерами"""
+
+        def __init__(self, logger: logging.Logger, handler: logging.Handler):
+            self.logger = logger
+            self.handler = handler
+
+        def __enter__(self):
+            self.logger.addHandler(self.handler)
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            # Освобождаем хендлер
+            self.logger.removeHandler(self.handler)
+            self.handler.flush()
+            self.handler.close()
 
     def decorator(func: F) -> F:
         @functools.wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            func_name = func.__name__
+        def wrapper(*args, **kwargs) -> Any:
+            # Создаем уникальный логгер для каждой функции
+            logger = logging.getLogger(f"{func.__module__}.{func.__name__}")
+            logger.setLevel(level)
 
-            # Используем StringIO как буфер для перехвата текста
-            log_stream = StringIO()
-
+            # Настройка логгера
             if filename:
-                handler = logging.FileHandler(filename, encoding="utf-8")
-            else:
-                # ВАЖНО: Указываем stream=sys.stdout, чтобы capsys мог это поймать
-                handler = logging.StreamHandler(stream=sys.stdout)
+                # Создаем папку, если её нет
+                log_dir = os.path.dirname(filename)
+                if log_dir and not os.path.exists(log_dir):
+                    os.makedirs(log_dir)
 
-            formatter = logging.Formatter('%(message)s')
+                handler = logging.FileHandler(filename, mode='a', encoding='utf-8')
+            else:
+                handler = logging.StreamHandler()
+
+            formatter = logging.Formatter(
+                "%(asctime)s [%(levelname)s] %(message)s",
+                datefmt="%Y-%m-%d %H:%M:%S"
+            )
             handler.setFormatter(formatter)
 
-            logger = logging.getLogger(func_name)
-            # Чистим хэндлеры перед добавлением нового, чтобы избежать дублирования при переиспользовании декоратора
-            logger.handlers.clear()
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
+            # Блокируем управление логером
+            with LogContext(logger, handler):
+                start_time = time.time()
+                try:
+                    logger.info(f"START {func.__name__}")
+                    result = func(*args, **kwargs)
+                    duration = round(time.time() - start_time, 3)
+                    logger.info(f"DONE {func.__name__} | Result: {result} | Time: {duration:.3f}s")
+                    return result
+                except Exception as e:
+                    duration = round(time.time() - start_time, 3)
+                    logger.error(
+                        f"FAILURE {func.__name__} "
+                        f"| Error: {repr(e)} "
+                        f"| Input args: {args}, kwargs: {kwargs} "
+                        f"| Time: {duration:.3f}s",
+                        exc_info=True
+                    )
+                    raise
 
-            start_time = datetime.now()
-            try:
-                result = func(*args, **kwargs)
-                duration_ms = int((datetime.now() - start_time).total_seconds() * 1000)
-
-                msg_success = (
-                    f"{func_name} ok | Duration: {duration_ms}ms | "
-                    f"Args: {args}, Kwargs: {kwargs}"
-                )
-                logger.info(msg_success)
-                return result
-            except Exception as e:
-                err_msg = (
-                    f"{func_name} error: {type(e).__name__}. "
-                    f"Inputs: args={args}, kwargs={kwargs}. Error: {e}"
-                )
-                logger.error(err_msg)
-                raise
-            finally:
-                # Обязательно удаляем обработчик!
-                logger.removeHandler(handler)
-                handler.close()
-
-        return cast(F, wrapper)
+        return wrapper
 
     return decorator
