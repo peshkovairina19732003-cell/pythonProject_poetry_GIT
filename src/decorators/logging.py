@@ -83,4 +83,5 @@ def log(filename: Optional[str] = None, level: int = logging.INFO) -> Callable[[
 
         return wrapper
 
+
     return decorator
