@@ -1,31 +1,33 @@
 import os
 import requests
-from dotenv import load_dotenv
-from typing import Optional
+from dotenv import load_dotenv  # Загружаем переменные окружения
 
-# Загружаем токен из .env
 load_dotenv()
 API_KEY = os.getenv('EXCHANGE_API_KEY')
 BASE_URL = "https://api.apilayer.com/exchangerates_data"
 
 
-def convert_to_rubles(transaction: dict) -> Optional[float]:
+def convert_to_rubles(transaction: dict) -> float:
     """
     Конвертирует сумму транзакции в рубли.
 
     Args:
         transaction (dict): Словарь с данными о транзакции.
-                           Должны присутствовать ключи amount, currency.
+                           Обязательные ключи: amount, currency.
 
     Returns:
-        float | None: Сумма в рублях или None, если валюта не поддерживается.
+        float: Сумма в рублях.
+               - Если валюта RUB, возвращается исходная сумма.
+               - Если валюта USD/EUR, происходит конвертация через API.
+               - Если валюта другая или возникла ошибка, возвращается исходная сумма.
     """
-    # Пропускаем операции уже в RUB
+
+    # Пропускаем операции уже в рублях
     if transaction['currency'] == 'RUB':
-        return transaction['amount']
+        return float(transaction['amount'])
 
     # Определяем валюту для конвертации (USD или EUR)
-    base_currency = transaction.get('currency')
+    base_currency = transaction.get('currency', '')
     target_currency = 'RUB'
 
     # Формируем URL запроса
@@ -35,13 +37,18 @@ def convert_to_rubles(transaction: dict) -> Optional[float]:
     response = requests.get(url, headers=headers)
 
     # Обработка ответа от API
-    if response.status_code == 200:
-        data = response.json()
-        result = data.get('result')
+    if response.status_code != 200 or not response.json().get('success'):
+        # Если статус не ОК ИЛИ сервер вернул неуспешный результат,
+        # мы просто возвращаем исходную сумму в виде float.
+        # Это соответствует условию задачи: всегда возвращать float!
+        return float(transaction['amount'])
 
-        # Умножаем исходную сумму на полученный курс
-        if result is not None and transaction['amount']:
-            return abs(float(result))
+    data = response.json()
+    result = data.get('result')  # Полученная сумма в рублях
 
-    print(f"Не удалось получить курс для {base_currency}")
-    return None
+    # Проверка на случай, если API вдруг изменит структуру ответа
+    if result is None:
+        return float(transaction['amount'])
+
+    # Умножаем исходную сумму на полученный курс
+    return abs(float(result))
