@@ -9,6 +9,7 @@ from typing import Any, Callable, Optional, TypeVar
 
 F = TypeVar('F', bound=Callable[..., Any])
 
+
 def log(filename: Optional[str] = None, level: int = logging.INFO) -> Callable[[F], F]:
     """
     Декоратор для автоматического логирования функций.
@@ -55,10 +56,7 @@ def log(filename: Optional[str] = None, level: int = logging.INFO) -> Callable[[
             else:
                 handler = logging.StreamHandler()
 
-            formatter = logging.Formatter(
-                "%(asctime)s [%(levelname)s] %(message)s",
-                datefmt="%Y-%m-%d %H:%M:%S"
-            )
+            formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
             handler.setFormatter(formatter)
 
             # Блокируем управление логером
@@ -77,11 +75,10 @@ def log(filename: Optional[str] = None, level: int = logging.INFO) -> Callable[[
                         f"| Error: {repr(e)} "
                         f"| Input args: {args}, kwargs: {kwargs} "
                         f"| Time: {duration:.3f}s",
-                        exc_info=True
+                        exc_info=True,
                     )
                     raise
 
         return wrapper
-
 
     return decorator

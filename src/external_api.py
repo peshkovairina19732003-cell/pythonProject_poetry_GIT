@@ -1,4 +1,5 @@
 import os
+
 import requests
 from dotenv import load_dotenv
 
@@ -6,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 API_KEY = os.getenv("EXCHANGE_API_KEY")
 BASE_URL = "https://api.apilayer.com/exchangerates_data"
+
 
 def convert_to_rubles(transaction: dict) -> float:
     """Конвертирует сумму транзакции в рубли."""
@@ -24,11 +26,7 @@ def convert_to_rubles(transaction: dict) -> float:
     response = requests.get(url, headers=headers)
 
     # Обработка ответа от API
-    if (
-        response.status_code != 200
-        or not response.json().get('success')
-        or not response.json().get('result')
-    ):
+    if response.status_code != 200 or not response.json().get('success') or not response.json().get('result'):
         # При любой ошибке просто возвращаем исходную сумму в виде float.
         # Это соответствует условию задачи: всегда возвращать float!
         return float(amount or 0.0)

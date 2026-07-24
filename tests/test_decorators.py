@@ -1,13 +1,15 @@
 # tests/test_decorators.py
 
+import logging  # <--- Импорт нужен для уровня ERROR
 import os
 import tempfile
-import pytest
-import logging  # <--- Импорт нужен для уровня ERROR
 import time  # <--- Задержка
+
+import pytest
 
 # Обязательный импорт
 from src.decorators.logging import log
+
 
 @pytest.fixture(scope="session")
 def temp_log_file():
@@ -16,14 +18,15 @@ def temp_log_file():
     yield temp_file.name
     # os.unlink(temp_file.name)
 
+
 @pytest.fixture
 def caplog_fixture():
     """Фикстура для перехвата логов в памяти."""
 
-
     import logging
     import logging.handlers
     from io import StringIO
+
     log_capture = StringIO()
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
@@ -31,6 +34,7 @@ def caplog_fixture():
     root_logger.addHandler(handler)
     yield log_capture
     root_logger.removeHandler(handler)
+
 
 class TestLogDecorator:
     """Комплексные тесты для декоратора @log."""
