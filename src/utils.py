@@ -1,14 +1,14 @@
 import json
-from pathlib import Path
+
 from typing import Dict, List
 
 
-def read_json_data(json_string: str) -> List[Dict]:
+def read_json_data(json_path: str) -> List[Dict]:
     """
     Читает данные о финансовых транзакциях из строки формата JSON.
 
     Args:
-        json_string (str): Строка с данными в формате JSON.
+        json_path (str): Строка с данными в формате JSON.
 
     Returns:
         List[Dict]: Список словарей с данными о транзакциях.
@@ -16,14 +16,15 @@ def read_json_data(json_string: str) -> List[Dict]:
                   возвращается пустой список.
     """
     try:
-        # Парсим входную строку
-        data = json.loads(json_string)
+        with open(json_path, mode='r', encoding="utf-8") as f:
+            # Парсим входную строку
+            data = json.load(f)
 
-        # Проверяем тип данных
-        if isinstance(data, list):
-            return data
-        else:
-            return []
+            # Проверяем тип данных
+            if isinstance(data, list):
+                return data
+            else:
+                return []
 
     except Exception as e:
         print(f"Ошибка парсинга JSON: {e}")
