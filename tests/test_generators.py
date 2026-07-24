@@ -1,6 +1,8 @@
+from typing import Any, Dict, List
+
 import pytest
-from typing import List, Dict, Any
-from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
+
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 @pytest.fixture
@@ -19,7 +21,7 @@ def all_transactions() -> List[Dict[str, Any]]:
             "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
             "description": "Перевод организации",
             "from": "Счет 75106830613657916952",
-            "to": "Счет 11776614605963066702"
+            "to": "Счет 11776614605963066702",
         },
         {
             "id": 142264268,
@@ -28,7 +30,7 @@ def all_transactions() -> List[Dict[str, Any]]:
             "operationAmount": {"amount": "79114.93", "currency": {"name": "USD", "code": "USD"}},
             "description": "Перевод со счета на счет",
             "from": "Счет 19708645243227258542",
-            "to": "Счет 75651667383060284188"
+            "to": "Счет 75651667383060284188",
         },
         {
             "id": 895315941,
@@ -37,7 +39,7 @@ def all_transactions() -> List[Dict[str, Any]]:
             "operationAmount": {"amount": "56883.54", "currency": {"name": "USD", "code": "USD"}},
             "description": "Перевод с карты на карту",
             "from": "Visa Classic 6831982476737658",
-            "to": "Visa Platinum 8990922113665229"
+            "to": "Visa Platinum 8990922113665229",
         },
         {
             "id": 873106923,
@@ -46,9 +48,8 @@ def all_transactions() -> List[Dict[str, Any]]:
             "operationAmount": {"amount": "43318.34", "currency": {"name": "руб.", "code": "RUB"}},
             "description": "Перевод со счета на счет",
             "from": "Счет 44812258784861134719",
-            "to": "Счет 74489636417521191160"
+            "to": "Счет 74489636417521191160",
         },
-
         # --- Некорректные / Пограничные случаи ---
         {"id": 1},  # Вообще без operationAmount
         {"id": 2, "operationAmount": {}},  # Пустой operationAmount
@@ -58,6 +59,7 @@ def all_transactions() -> List[Dict[str, Any]]:
 
 
 # --- Тесты для filter_by_currency ---
+
 
 def test_filter_by_currency_usd(all_transactions):
     """Проверяем, что находятся ВСЕ три USD транзакции."""
@@ -85,6 +87,7 @@ def test_filter_by_currency_handles_missing_data(all_transactions):
 
 # --- Тесты для transaction_descriptions ---
 
+
 def test_transaction_descriptions(all_transactions):
     """
     Проверяем извлечение описаний для всех валидных транзакций.
@@ -98,7 +101,7 @@ def test_transaction_descriptions(all_transactions):
         "Перевод организации",  # id: 939719570
         "Перевод со счета на счет",  # id: 142264268
         "Перевод с карты на карту",  # id: 895315941
-        "Перевод со счета на счет"  # id: 873106923
+        "Перевод со счета на счет",  # id: 873106923
     ]
 
     assert list(desc_gen) == expected_descs
@@ -109,6 +112,7 @@ def test_transaction_descriptions_empty():
 
 
 # --- Тесты для card_number_generator ---
+
 
 def test_card_number_generator_small_range():
     gen = card_number_generator(1, 3)

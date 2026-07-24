@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
 
 
 def read_json_data(json_string: str) -> List[Dict]:

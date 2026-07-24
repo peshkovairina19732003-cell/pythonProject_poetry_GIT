@@ -1,15 +1,14 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
+
 from src.external_api import convert_to_rubles
 
 
 @pytest.fixture
 def mock_transaction_usd():
     """Фикстура для транзакции в долларах."""
-    return {
-        "amount": 100,
-        "currency": "USD"
-    }
+    return {"amount": 100, "currency": "USD"}
 
 
 @patch('requests.get')
@@ -62,4 +61,3 @@ def test_convert_no_result_in_response(mock_get):
     result = convert_to_rubles(transaction)
     assert isinstance(result, float)
     assert result == 100.0
-

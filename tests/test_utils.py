@@ -1,18 +1,17 @@
-import pytest
-from unittest.mock import patch
 import json  # Для работы со строками
-# from io import StringIO      # Больше не нужно!
+from unittest.mock import patch
+
+import pytest
 
 from src.utils import read_json_data  # Обратите внимание на новое имя
+
+# from io import StringIO      # Больше не нужно!
 
 
 @pytest.fixture
 def sample_data():
     """Возвращает примерный список транзакций."""
-    return [
-        {"id": 1, "amount": 100},
-        {"id": 2, "amount": -50}
-    ]
+    return [{"id": 1, "amount": 100}, {"id": 2, "amount": -50}]
 
 
 # Тест на чтение пустого списка или несуществующего файла
