@@ -2,18 +2,14 @@
 requires = ["poetry-core>=1.8.3"]
 build-backend = "poetry.core.masonry.api"
 
+
 # Основной блок с информацией о проекте
 [project]
-name = "pythonproject-poetry-GIT" # Можно убрать, если вы не планируете публиковать пакет
+name = "pythonProject_poetry_GIT"
 version = "0.1.0"
-description = ""
-authors = [
-    { name = "Irina Peshkova", email = "peshkova.irina19732003@gmail.com"}
-]
-license = "MIT"
 readme = "README.md"
 
-# Отключаем упаковку проекта, так как мы просто пишем приложение
+
 package-mode = false
 
 # Требуемая версия Python
@@ -37,6 +33,10 @@ dev = [
 ]
 
 # Настройки инструментов
+
+[tool.poetry]
+packages = [{include = "src"}]
+
 [tool.isort]
 multi_line_output = 3
 include_trailing_comma = true

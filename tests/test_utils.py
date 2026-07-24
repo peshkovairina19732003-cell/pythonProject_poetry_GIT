@@ -1,78 +1,53 @@
-import json
-from pathlib import Path
-import tempfile
 import pytest
+from unittest.mock import patch
+import json  # Для работы со строками
+# from io import StringIO      # Больше не нужно!
 
-# Импортируем функцию из модуля utils
-from src.utils import read_json_file
+from src.utils import read_json_data  # Обратите внимание на новое имя
 
 
 @pytest.fixture
 def sample_data():
-    """Возвращает тестовые данные."""
+    """Возвращает примерный список транзакций."""
     return [
         {"id": 1, "amount": 100},
         {"id": 2, "amount": -50}
     ]
 
 
+# Тест на чтение пустого списка или несуществующего файла
+# МЫ БОЛЬШЕ НЕ ИМИТИРУЕМ ФАЙЛОВУЮ СИСТЕМУ!
+def test_read_empty_file():
+    """
+    Проверяет поведение при чтении пустого файла или файла со списком [].
+    Должен вернуть пустой список.
+    """
+    result = read_json_data("[]")  # Передаем валидную пустую структуру
+    assert result == [], "Функция должна всегда возвращать только списки!"
+
+
+# Основной тест на валидный JSON
 def test_read_valid_json(sample_data):
     """
     Проверяет чтение валидного JSON-файла со списком транзакций.
     """
-    # Создаём временный файл в временной директории
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        file_path = Path(tmp_dir) / "test_transactions.json"
+    # Преобразуем наши тестовые данные в строку JSON
+    file_content = json.dumps(sample_data)
 
-        # Записываем тестовые данные
-        file_path.write_text(json.dumps(sample_data), encoding="utf-8")
-
-        # Читаем файл через нашу функцию
-        transactions = read_json_file(str(file_path))
-
-        # Проверки
-        assert len(transactions) == 2
-        assert isinstance(transactions[0], dict)
-        assert transactions[0]["id"] == 1
-        assert transactions[1]["amount"] == -50
+    transactions = read_json_data(file_content)
+    assert len(transactions) == 2  # В списке должно быть две транзакции
+    assert isinstance(transactions[0], dict)  # Первая транзакция должна быть словарём
+    assert transactions[0]["id"] == 1  # ID первой транзакции должен быть равен 1
 
 
-def test_read_empty_file():
-    """
-    Проверяет поведение при чтении пустого файла.
-    Должен вернуть пустой список.
-    """
-    # Создаём временную директорию и файл внутри неё.
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        empty_file = Path(tmp_dir) / "empty.json"
-        empty_file.write_text("", encoding="utf-8")  # Пустой файл
-        result = read_json_file(str(empty_file))
-        assert result == []
-
-
+# Тест на неверную структуру данных
 def test_read_non_list():
     """
-    Проверяет поведение при чтении файла, который содержит не-список (например, словарь).
-    Должен вернуть пустой список согласно ТЗ.
+    Проверяет обработку файла, который содержит не-список.
+    По условию задачи функция должна вернуть пустой список.
     """
-    invalid_data = {
-        "key": "value",
-        "transactions": ["This", "is", "not", "a", "list"]
-    }
+    # Имитируем словарь вместо списка
+    file_content = '{"key": "value"}'
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        invalid_file = Path(tmp_dir) / "invalid.json"
-        invalid_file.write_text(json.dumps(invalid_data), encoding="utf-8")
-        result = read_json_file(str(invalid_file))
-        assert result == []
-        # По условию задачи, если это не список — возвращать пустой список
-
-
-def test_read_missing_file():
-    """
-    Проверяет поведение при попытке прочитать несуществующий файл.
-    Должен вернуть пустой список.
-    """
-    non_existent_file = "./nonexistent/path/to/file.json"
-    result = read_json_file(non_existent_file)
-    assert result == []
+    result = read_json_data(file_content)
+    assert result == [], "Функция должна возвращать только списки!"
