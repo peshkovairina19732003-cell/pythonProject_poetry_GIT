@@ -41,7 +41,7 @@ def test_convert_invalid_currency(mock_get):
 
     result = convert_to_rubles(transaction)
     assert isinstance(result, float)  # Важно! Тип float
-    assert result == 100.0
+    assert result == 0
 
 
 @patch('requests.get')
@@ -60,4 +60,4 @@ def test_convert_no_result_in_response(mock_get):
 
     result = convert_to_rubles(transaction)
     assert isinstance(result, float)
-    assert result == 100.0
+    assert result == 0

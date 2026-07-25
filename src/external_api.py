@@ -1,37 +1,48 @@
 import os
 
 import requests
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # Загружаем переменные окружения
 
-# Загрузка переменных окружения ДО получения ключа!
 load_dotenv()
 API_KEY = os.getenv("EXCHANGE_API_KEY")
 BASE_URL = "https://api.apilayer.com/exchangerates_data"
 
 
 def convert_to_rubles(transaction: dict) -> float:
-    """Конвертирует сумму транзакции в рубли."""
+    """
+    Конвертирует сумму операции в рубли.
 
-    amount = transaction.get('amount')
-    currency = transaction.get('currency', '')
+    Args:
+        transaction (dict): Словарь с данными о банковской операции.
+                           Обязательные поля: operationAmount.amount, operationAmount.currency.code.
+
+    Returns:
+        float: Сумма в рублях.
+               - Если валюта RUB, возвращается исходная сумма.
+               - При ошибке запроса к API или отсутствии ключа result
+                 возвращается исходная сумма в виде числа с плавающей точкой.
+    """
+
+    # Получаем доступ к вложенным полям
+    amount_str = transaction.get("operationAmount", {}).get("amount")  # Это строка! Нужно привести к числу
+    currency_code = transaction.get("operationAmount", {}).get("currency", {}).get("code")  # Может быть None
 
     # Пропускаем операции уже в рублях
-    if currency == 'RUB':
-        return float(amount or 0.0)
+    if currency_code == "RUB":
+        return float(amount_str or 0.0)
 
     # Формируем URL запроса
-    url = f"{BASE_URL}/convert?to=RUB&from={currency}"
+    url = f"{BASE_URL}/convert?to=RUB&from={currency_code}"
     headers = {"apikey": API_KEY}
 
     response = requests.get(url, headers=headers)
 
     # Обработка ответа от API
-    if response.status_code != 200 or not response.json().get('success') or not response.json().get('result'):
+    if response.status_code != 200 or not response.json().get("success") or not response.json().get("result"):
         # При любой ошибке просто возвращаем исходную сумму в виде float.
-        # Это соответствует условию задачи: всегда возвращать float!
-        return float(amount or 0.0)
+        return float(amount_str or 0.0)
 
-    result = response.json()['result']
+    result = response.json()["result"]
 
     # Умножаем исходную сумму на полученный курс
     return abs(float(result))
