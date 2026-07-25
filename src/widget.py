@@ -1,8 +1,7 @@
-from src.masks import get_mask_card_number, get_mask_account
-
 import re
-
 from datetime import datetime
+
+from src.masks import get_mask_account, mask_card_number
 
 
 def mask_account_card(input_str: str) -> str:
@@ -10,8 +9,9 @@ def mask_account_card(input_str: str) -> str:
     Принимает строку с типом и номером (карта или счет) и возвращает ее с замаскированным номером.
     Переиспользует функции get_mask_card_number и get_mask_account.
     """
+
     # Находим числовую часть в строке.
-    match = re.search(r'\d{4,}', input_str)
+    match = re.search(r"\d{4,}", input_str)
     if not match:
         raise ValueError("В строке не найден номер")
 
@@ -20,13 +20,14 @@ def mask_account_card(input_str: str) -> str:
     number = match.group()
 
     # Определяем тип по префиксу.
-    is_account = prefix.lower() == 'счет'
+    is_account = prefix.lower() == "счет"
 
     # Применяем соответствующую функцию маскировки.
+
     if is_account:
         masked = get_mask_account(number)
     else:
-        masked = get_mask_card_number(number)
+        masked = mask_card_number(number)
 
     # Возвращаем исходный префикс и замаскированный номер.
     return f"{prefix} {masked}"

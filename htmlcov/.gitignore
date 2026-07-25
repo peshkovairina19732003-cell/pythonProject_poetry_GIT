@@ -1,0 +1,7 @@
+# Created by coverage.py
+*
+*.pyc
+__pycache__/
+venv/
+.env
+
