@@ -1,11 +1,9 @@
-import json  # Для работы со строками
+import json
 from unittest.mock import patch
 
 import pytest
 
-from src.utils import read_json_data  # Обратите внимание на новое имя
-
-# from io import StringIO      # Больше не нужно!
+from src.utils import read_json_file
 
 
 @pytest.fixture
@@ -21,7 +19,7 @@ def test_read_empty_file():
     Проверяет поведение при чтении пустого файла или файла со списком [].
     Должен вернуть пустой список.
     """
-    result = read_json_data("[]")  # Передаем валидную пустую структуру
+    result = read_json_file("[]")  # Передаем валидную пустую структуру
     assert result == [], "Функция должна всегда возвращать только списки!"
 
 
@@ -33,7 +31,7 @@ def test_read_valid_json(sample_data):
     # Преобразуем наши тестовые данные в строку JSON
     file_content = json.dumps(sample_data)
 
-    transactions = read_json_data(file_content)
+    transactions = read_json_file(file_content)
     assert len(transactions) == 0  # В списке должно быть две транзакции
 
 
@@ -46,5 +44,5 @@ def test_read_non_list():
     # Имитируем словарь вместо списка
     file_content = '{"key": "value"}'
 
-    result = read_json_data(file_content)
+    result = read_json_file(file_content)
     assert result == [], "Функция должна возвращать только списки!"

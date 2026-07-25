@@ -1,4 +1,5 @@
 import os
+
 import requests
 from dotenv import load_dotenv  # Загружаем переменные окружения
 
@@ -37,11 +38,7 @@ def convert_to_rubles(transaction: dict) -> float:
     response = requests.get(url, headers=headers)
 
     # Обработка ответа от API
-    if (
-            response.status_code != 200
-            or not response.json().get("success")
-            or not response.json().get("result")
-    ):
+    if response.status_code != 200 or not response.json().get("success") or not response.json().get("result"):
         # При любой ошибке просто возвращаем исходную сумму в виде float.
         return float(amount_str or 0.0)
 
